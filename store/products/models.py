@@ -12,7 +12,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название товара')
     description = models.TextField(verbose_name='Описание товара')
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0, verbose_name='Количество товара на складе')
     image = models.ImageField(upload_to='products_images')
     category = models.ForeignKey(
