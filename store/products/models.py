@@ -5,6 +5,9 @@ class ProductCategory(models.Model):
     name = models.CharField(max_length=128, unique=True, verbose_name='Название категории')
     description = models.TextField(null=True, blank=True, verbose_name='Описание категории')
 
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название товара')
