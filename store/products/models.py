@@ -20,3 +20,6 @@ class Product(models.Model):
         on_delete=models.PROTECT,
         related_name='category',
     )
+
+    def __str__(self):
+        return {self.name}
