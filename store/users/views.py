@@ -40,7 +40,7 @@ def registration(request):
 
 def profile(request):
     if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, instance=request.user)
+        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('users:profile'))
