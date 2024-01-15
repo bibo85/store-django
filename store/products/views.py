@@ -18,7 +18,7 @@ def products(request: HttpRequest) -> HttpResponse:
     return render(request, 'products/products.html', context=context)
 
 
-def basket_add(request: HttpRequest, product_id):
+def basket_add(request: HttpRequest, product_id) -> HttpResponse:
     product = Product.objects.get(pk=product_id)
     baskets = Basket.objects.filter(user=request.user, product=product)
 
@@ -29,4 +29,10 @@ def basket_add(request: HttpRequest, product_id):
         basket.quantity += 1
         basket.save()
 
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def basket_remove(request: HttpRequest, basket_id):
+    basket = Basket.objects.get(id=basket_id)
+    basket.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
