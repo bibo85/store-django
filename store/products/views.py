@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from products.models import Product, ProductCategory, Basket
 from users.models import User
@@ -18,6 +19,7 @@ def products(request: HttpRequest) -> HttpResponse:
     return render(request, 'products/products.html', context=context)
 
 
+@login_required
 def basket_add(request: HttpRequest, product_id) -> HttpResponse:
     product = Product.objects.get(pk=product_id)
     baskets = Basket.objects.filter(user=request.user, product=product)
@@ -32,6 +34,7 @@ def basket_add(request: HttpRequest, product_id) -> HttpResponse:
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def basket_remove(request: HttpRequest, basket_id):
     basket = Basket.objects.get(id=basket_id)
     basket.delete()
