@@ -10,11 +10,12 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'products/index.html')
 
 
-def products(request: HttpRequest) -> HttpResponse:
+def products(request: HttpRequest, category_id=None) -> HttpResponse:
+    products = Product.objects.filter(category__id=category_id) if category_id else Product.objects.all()
     context = {
         'title': 'Store - Каталог',
-        'products': Product.objects.all(),
         'categories': ProductCategory.objects.all(),
+        'products': products,
     }
     return render(request, 'products/products.html', context=context)
 
