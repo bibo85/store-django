@@ -7,6 +7,10 @@ class ProductCategory(models.Model):
     name = models.CharField(max_length=128, unique=True, verbose_name='Название категории')
     description = models.TextField(null=True, blank=True, verbose_name='Описание категории')
 
+    class Meta:
+        verbose_name = 'Категория товаров'
+        verbose_name_plural = 'Категории товаров'
+
     def __str__(self):
         return self.name
 
@@ -23,6 +27,10 @@ class Product(models.Model):
         related_name='category',
         verbose_name='Категория'
     )
+
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
     def __str__(self):
         return self.name
