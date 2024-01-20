@@ -2,13 +2,19 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
 
 from products.models import Product, ProductCategory, Basket
 from users.models import User
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    return render(request, 'products/index.html')
+class IndexView(TemplateView):
+    template_name = 'products/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Store'
+        return context
 
 
 def products(request: HttpRequest, category_id=None) -> HttpResponse:
