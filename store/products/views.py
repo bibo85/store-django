@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 
 from products.models import Product, ProductCategory, Basket
 
@@ -16,18 +17,21 @@ class IndexView(TemplateView):
         return context
 
 
-def products(request: HttpRequest, category_id=None) -> HttpResponse:
-    products = Product.objects.filter(category__id=category_id) if category_id else Product.objects.all()
-    page = request.GET.get(key='page', default=1)
-    per_page = 2
-    paginator = Paginator(products, per_page)
-    products_paginator = paginator.page(page)
-    context = {
-        'title': 'Store - Каталог',
-        'categories': ProductCategory.objects.all(),
-        'products': products_paginator,
-    }
-    return render(request, 'products/products.html', context=context)
+class ProductsListView(ListView):
+    model = Product
+    template_name = 'products/products.html'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category__id=category_id) if category_id else queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductsListView, self).get_context_data()
+        context['title'] = 'Store - Каталог'
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
 
 @login_required
