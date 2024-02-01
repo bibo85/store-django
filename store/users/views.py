@@ -32,6 +32,11 @@ class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     success_url = reverse_lazy('users:login')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['title'] = 'Store - Регистрация пользователя'
+        return context
+
 
 class UserProfileView(UpdateView):
     model = User
