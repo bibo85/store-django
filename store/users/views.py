@@ -1,11 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse, reverse_lazy
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .models import User
+from .models import User, EmailVerification
 from .forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from products.models import Basket
 from common.views import TitleMixin
@@ -40,3 +41,19 @@ class UserProfileView(SuccessMessageMixin, TitleMixin, UpdateView):
         context = super().get_context_data()
         context['baskets'] = Basket.objects.filter(user=self.object)
         return context
+
+
+class EmailVerificationView(TitleMixin, TemplateView):
+    title = 'Store - Подтверждение электронной почты'
+    template_name = 'users/email_verification.html'
+
+    def get(self, request, *args, **kwargs):
+        code = kwargs['code']
+        user = User.objects.get(email=kwargs['email'])
+        email_verification = EmailVerification.objects.filter(user=user, code=code)
+        if email_verification.exists() and not email_verification.first().is_expired():
+            user.is_verified_email = True
+            user.save()
+            return super().get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('index'))
