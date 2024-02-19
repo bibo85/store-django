@@ -6,6 +6,7 @@ cryptography==42.0.2
 defusedxml==0.7.1
 Django==4.2.6
 django-allauth==0.61.1
+django-debug-toolbar==4.3.0
 flake8==7.0.0
 idna==3.6
 isort==5.13.2
