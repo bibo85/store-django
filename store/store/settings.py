@@ -174,6 +174,8 @@ LOGOUT_REDIRECT_URL = 'index'
 # EMAIL_HOST_USER = ''  # email address on the Yandex. Example: username@yandex.ru
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_USE_SSL = True
+
+# !!! comment, if the host is configured to send mail
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # OAuth
@@ -195,3 +197,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_QUERY_EMAIL = True
+
+
+# Celery
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
