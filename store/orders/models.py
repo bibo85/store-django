@@ -27,5 +27,10 @@ class Order(models.Model):
         on_delete=models.CASCADE,
     )
 
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ('id',)
+
     def __str__(self):
         return f'Order #{self.id}. {self.first_name} {self.last_name}'
