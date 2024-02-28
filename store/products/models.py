@@ -1,6 +1,11 @@
+import stripe
+
+from django.conf import settings
 from django.db import models
 
 from users.models import User
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ProductCategory(models.Model):
@@ -36,6 +41,21 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.stripe_product_price_id:
+            stripe_product_price = self.create_stripe_product_price()
+            self.stripe_product_price_id = stripe_product_price['id']
+        super().save(*args, **kwargs)
+
+    def create_stripe_product_price(self):
+        stripe_product = stripe.Product.create(name=self.name)
+        stripe_product_price = stripe.Price.create(
+            product=stripe_product['id'],
+            unit_amount=round(self.price * 100),
+            currency='rub',
+        )
+        return stripe_product_price
 
 
 class BasketQuerySet(models.QuerySet):
