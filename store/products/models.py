@@ -107,7 +107,8 @@ class Basket(models.Model):
         }
         return basket_item
 
-    def create_or_update(self, product_id, user):
+    @classmethod
+    def create_or_update(cls, product_id, user):
         product = Product.objects.get(pk=product_id)
         baskets = Basket.objects.filter(user=user, product=product)
 
